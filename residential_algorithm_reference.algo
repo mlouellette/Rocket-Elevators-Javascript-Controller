@@ -221,7 +221,7 @@ SET elevator TO CALL column requestElevator WITH 3 AND Up RETURNING elevator
 CALL elevator requestFloor WITH 5
 
 '//Part 3
-SET elevator TO CALL column requestElevator WITH 9 AND Down RETURNING elevator
+SET elevator TO CALL column requestEWITHlevator WITH 9 AND Down RETURNING elevator
 CALL elevator requestFloor WITH 2
 '==================================End Scenario 2=============================================
 
