@@ -1,9 +1,3 @@
-// console.log('ici')
-// let elevatorID = 1
-// let floorRequestButtonID = 1
-// let callButtonID = 1
-
-
 class Column {
     constructor(_ID, _amountOfFloors, _amountOfElevators) {
         this.ID = _ID;
@@ -14,10 +8,9 @@ class Column {
         this.createElevators(_amountOfFloors, _amountOfElevators);
         this.createCallButtons(_amountOfFloors);
 
-        
-
     };
 
+    // Button press function, Up or Down
     createCallButtons(_amountOfFloors) {
        let callButtonID = 1
        let buttonFloor = 1;
@@ -41,7 +34,8 @@ class Column {
 
       }
     }
-
+    
+    // Create Elevator function for the different scenarios
     createElevators(_amountOfFloors, _amountOfElevators) {
         let elevatorID = 1
         for (let i = 0; i < _amountOfElevators; i++) {
@@ -50,11 +44,10 @@ class Column {
             elevatorID++;
 
         }
-
     }
 
+    //Simulate when a user press a button outside the elevator. Push the demand into a list.
     requestElevator(floor, direction) {
-        
         let elevator = this.findElevator(floor, direction);
         elevator.floorRequestList.push(floor);
         elevator.move();
@@ -63,6 +56,9 @@ class Column {
 
     }
 
+    //We use a score system depending on the current elevators state. Since the bestScore and the referenceGap are 
+    //higher values than what could be possibly calculated, the first elevator will always become the default bestElevator, 
+    //before being compared with to other elevators. If two elevators get the same score, the nearest one is prioritized.
     findElevator(requestedFloor, requestedDirection) {
         let bestElevator;
         let bestScore = 5;
@@ -70,17 +66,24 @@ class Column {
         let bestElevatorInformations;
         for (let i = 0; i < this.elevatorList.length; i++) {
             let elevator = this.elevatorList[i];
+
+            //The elevator is at my floor and going in the direction I want
             if (requestedFloor === elevator.currentFloor && elevator.status === "stopped" && requestedDirection === elevator.direction) {
                 bestElevatorInformations = this.checkIfElevatorIsBetter(1, elevator, bestScore, referenceGap, bestElevator, requestedFloor);
 
+            //The elevator is lower than me, is coming up and I want to go up
             } else if (requestedFloor >= elevator.currentFloor && elevator.direction === "Up" && requestedDirection === elevator.direction) {
                 bestElevatorInformations = this.checkIfElevatorIsBetter(2, elevator, bestScore, referenceGap, bestElevator, requestedFloor);
 
+            //The elevator is higher than me, is coming down and I want to go down
             } else if (requestedFloor <= elevator.currentFloor && elevator.direction === "down" && requestedDirection === elevator.direction) {
                 bestElevatorInformations = this.checkIfElevatorIsBetter(2, elevator, bestScore, referenceGap, bestElevator, requestedFloor);
 
+            //The elevator is idle
             } else if (elevator.status === "idle") {
                 bestElevatorInformations = this.checkIfElevatorIsBetter(3, elevator, bestScore, referenceGap, bestElevator, requestedFloor);
+
+            //The elevator is not available, but still could take the call if nothing better is found    
             } else {
                 bestElevatorInformations = this.checkIfElevatorIsBetter(4, elevator, bestScore, referenceGap, bestElevator, requestedFloor);
             }
@@ -92,15 +95,16 @@ class Column {
         return bestElevator;
 
     }
-
+    
+    // Select the closest/best elevator to do the scenario
     checkIfElevatorIsBetter(scoreToCheck, newElevator, bestScore, referenceGap, bestElevator, floor) {
         if (scoreToCheck < bestScore) {
             bestScore = scoreToCheck;
             bestElevator = newElevator;
-            referenceGap = newElevator.currentFloor - floor; //a verifier ABSOLUTE VALUE?
+            referenceGap = Math.abs(newElevator.currentFloor - floor);
 
         } else if (bestScore === scoreToCheck) {
-            let gap = newElevator.currentFloor - floor;
+            let gap = Math.abs(newElevator.currentFloor - floor);
             if (referenceGap > gap) {
                 bestElevator = newElevator;
                 referenceGap = gap;
@@ -109,27 +113,25 @@ class Column {
         }
         return { bestElevator,
                  bestScore,
-                 referenceGap} 
+                 referenceGap}; 
         
     }
-  
 }
-
 class Elevator {
     constructor(_ID, _amountOfFloors) {
         this.ID = _ID;
         this.status = "";
-        this.currentFloor = "";
+        this.currentFloor = 1
         this.direction = null;
         this.door = new Door(_ID, "closed");
         this.floorRequestButtonList = [];
         this.floorRequestList = [];
-        
 
         this.createFloorRequestButtons(_amountOfFloors)
 
     }
 
+    // Push the request demands in lists 
     createFloorRequestButtons(_amountOfFloors) {
         let floorRequestButtonID = 1
         let buttonFloor = 1
@@ -140,9 +142,9 @@ class Elevator {
             floorRequestButtonID++
 
         }
-
     }
 
+    // Simulate when a user press a button inside the elevator
     requestFloor(floor) {
         this.floorRequestList.push(floor);
         this.move();
@@ -150,6 +152,7 @@ class Elevator {
 
     }
 
+    // Move elevator to the direction based on what floor we are currently
     move() {
         while (this.floorRequestList != 0) {
             let destination = this.floorRequestList[0];
@@ -172,13 +175,14 @@ class Elevator {
                 }
             }
             this.status = "stopped";
-            this.floorRequestList.shift()// removes the first element of an array
+            this.floorRequestList.shift()
 
         }
         this.status = "idle";
 
     }
 
+    // Sort list function to pick up other requests mid destination
     sortFloorList() {
         if (this.direction === "up") {
             this.floorRequestList.sort();
@@ -189,9 +193,10 @@ class Elevator {
         }
     }
 
+    // Alert preventing doors obstructions and overweight oad in the elevator
     operateDoors() {
         this.door.status = "opened";
-        // setTimeout(5000);
+        
         if (this.door.status != "overweight") {
             this.door.status = "closing";
             if (this != "Obstruction") {
@@ -208,15 +213,9 @@ class Elevator {
 
             }
             this.operateDoors();
-
         }
-
     }
-
-
-
 }
-
 class CallButton {
     constructor(_ID, _floor, _direction) {
         this.ID = _ID;
@@ -226,7 +225,6 @@ class CallButton {
 
     }
 }
-
 class FloorRequestButton {
     constructor(_ID, _floor ){
         this.ID = _ID;
@@ -235,7 +233,6 @@ class FloorRequestButton {
 
     }
 }
-
 class Door {
     constructor(_ID) {
         this.ID = _ID;
