@@ -5,6 +5,7 @@ Type npm install in the console
 
 ## Example
 npm install
+
 npm run dev
 
 # Description
