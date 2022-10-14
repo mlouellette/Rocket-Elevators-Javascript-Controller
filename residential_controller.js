@@ -10,7 +10,7 @@ class Column {
 
     };
 
-    // Button press function, Up or Down
+    //Button press function, Up or Down
     createCallButtons(_amountOfFloors) {
        let callButtonID = 1
        let buttonFloor = 1;
@@ -35,7 +35,7 @@ class Column {
       }
     }
     
-    // Create Elevator function for the different scenarios
+    //Create Elevator function for the different scenarios
     createElevators(_amountOfFloors, _amountOfElevators) {
         let elevatorID = 1
         for (let i = 0; i < _amountOfElevators; i++) {
@@ -72,11 +72,11 @@ class Column {
                 bestElevatorInformations = this.checkIfElevatorIsBetter(1, elevator, bestScore, referenceGap, bestElevator, requestedFloor);
 
             //The elevator is lower than me, is coming up and I want to go up
-            } else if (requestedFloor >= elevator.currentFloor && elevator.direction === "Up" && requestedDirection === elevator.direction) {
+            } else if (requestedFloor > elevator.currentFloor && elevator.direction === "Up" && requestedDirection === elevator.direction) {
                 bestElevatorInformations = this.checkIfElevatorIsBetter(2, elevator, bestScore, referenceGap, bestElevator, requestedFloor);
 
             //The elevator is higher than me, is coming down and I want to go down
-            } else if (requestedFloor <= elevator.currentFloor && elevator.direction === "down" && requestedDirection === elevator.direction) {
+            } else if (requestedFloor < elevator.currentFloor && elevator.direction === "down" && requestedDirection === elevator.direction) {
                 bestElevatorInformations = this.checkIfElevatorIsBetter(2, elevator, bestScore, referenceGap, bestElevator, requestedFloor);
 
             //The elevator is idle
@@ -96,7 +96,7 @@ class Column {
 
     }
     
-    // Select the closest/best elevator to do the scenario
+    //Select the closest/best elevator to do the scenario
     checkIfElevatorIsBetter(scoreToCheck, newElevator, bestScore, referenceGap, bestElevator, floor) {
         if (scoreToCheck < bestScore) {
             bestScore = scoreToCheck;
@@ -131,7 +131,7 @@ class Elevator {
 
     }
 
-    // Push the request demands in lists 
+    //Push the request demands in lists 
     createFloorRequestButtons(_amountOfFloors) {
         let floorRequestButtonID = 1
         let buttonFloor = 1
@@ -144,7 +144,7 @@ class Elevator {
         }
     }
 
-    // Simulate when a user press a button inside the elevator
+    //Simulate when a user press a button inside the elevator
     requestFloor(floor) {
         this.floorRequestList.push(floor);
         this.move();
@@ -152,7 +152,7 @@ class Elevator {
 
     }
 
-    // Move elevator to the direction based on what floor we are currently
+    //Move elevator to the direction based on what floor we are currently
     move() {
         while (this.floorRequestList != 0) {
             let destination = this.floorRequestList[0];
@@ -182,7 +182,7 @@ class Elevator {
 
     }
 
-    // Sort list function to pick up other requests mid destination
+    //Sort list function to pick up other requests mid destination
     sortFloorList() {
         if (this.direction === "up") {
             this.floorRequestList.sort();
@@ -193,7 +193,7 @@ class Elevator {
         }
     }
 
-    // Alert preventing doors obstructions and overweight oad in the elevator
+    //Alert preventing doors obstructions and overweight oad in the elevator
     operateDoors() {
         this.door.status = "opened";
         
