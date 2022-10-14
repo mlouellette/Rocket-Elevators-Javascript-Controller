@@ -1,17 +1,19 @@
 # Rocket-Elevators-Javascript-Controller
-This is the template to use for the javascript residential controller. You will find the classes that should be used along with some methods described in the requirements.
-The necessary files to run some tests are also present. With Node JS and NPM installed, first run:
 
-`npm install`
+# Usage
+Type npm install in the console
 
-and then, to run the tests:
+## Example
+npm install
+npm run dev
 
-`npm test`
+# Description
+This program is a controller for an elevator installation which takes the input from outside the elevator to call the best possible elevator and pick up the person on the right floor. Then once inside it, they can select wichever floor input they want to go to and takes them to the destination. The code is able to run through multiple scenarios with different floors, different directions and different stops.
 
-With a fully completed project, you should get an output like:
-
-![Screenshot from 2021-06-10 16-31-36](https://user-images.githubusercontent.com/28630658/121592985-5edd2600-ca09-11eb-9ff0-38215b74c67c.png)
-
-All of these files can be left in your final project but no scenarios should be present in your code. The grader will run tests similar to the ones provided.
-
-Of course, make sure to edit this Readme file to describe your own project!
+# Dependencies
+Run program needs:
+- Current floor of the person pressing the button
+- Current floor of the elevator
+- Direction the elevator is going
+- Direction the person wants to go
+- Status of the elevator
