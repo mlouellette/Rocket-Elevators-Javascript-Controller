@@ -117,6 +117,7 @@ class Column {
         
     }
 }
+
 class Elevator {
     constructor(_ID, _amountOfFloors) {
         this.ID = _ID;
@@ -216,6 +217,7 @@ class Elevator {
         }
     }
 }
+
 class CallButton {
     constructor(_ID, _floor, _direction) {
         this.ID = _ID;
@@ -225,6 +227,7 @@ class CallButton {
 
     }
 }
+
 class FloorRequestButton {
     constructor(_ID, _floor ){
         this.ID = _ID;
@@ -233,6 +236,7 @@ class FloorRequestButton {
 
     }
 }
+
 class Door {
     constructor(_ID) {
         this.ID = _ID;
